@@ -1,6 +1,6 @@
 package pkg
 
-type cloudProvider interface {
-	initialCloudSession() bool
-	retrieveCredentials() map[string]string
+type CloudProvider interface {
+	InitialCloudSession() CloudProvider
+	RetrieveCredentials() map[string]string
 }

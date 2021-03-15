@@ -6,40 +6,43 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/pkg"
 )
 
-type awsProvider struct {
+type AwsProvider struct {
 	session       *session.Session
-	region        string
+	Region        string
 	secretManager *secretsmanager.SecretsManager
-	secretName    string
+	SecretName    string
 }
 
-func (awsProvider awsProvider) initialCloudSession() bool {
+func (awsProvider AwsProvider) InitialCloudSession() pkg.CloudProvider {
 	awsProvider.session = session.Must(session.NewSession())
 	awsProvider.secretManager = secretsmanager.New(
 		awsProvider.session,
-		aws.NewConfig().WithRegion(awsProvider.region),
+		aws.NewConfig().WithRegion(awsProvider.Region),
 	)
-	return awsProvider.secretManager != nil
+
+	return awsProvider
 }
 
-func (awsProvider awsProvider) retrieveCredentials() map[string]interface{} {
+func (awsProvider AwsProvider) RetrieveCredentials() map[string]string {
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId: aws.String(awsProvider.secretName),
+		SecretId: aws.String(awsProvider.SecretName),
 	}
+
 	result, err := awsProvider.secretManager.GetSecretValue(input)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	var secretBinary []byte
-	if result.SecretBinary != nil {
-		secretBinary = result.SecretBinary
+	var secretString string
+	if result.SecretString != nil {
+		secretString = *result.SecretString
 	}
 
-	var credentialData map[string]interface{}
-	if err := json.Unmarshal(secretBinary, &credentialData); err != nil {
+	var credentialData map[string]string
+	if err := json.Unmarshal([]byte(secretString), &credentialData); err != nil {
 		panic(err)
 	}
 
