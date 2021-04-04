@@ -1,12 +1,14 @@
-package provider
+package cloud
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
-	"github.com/kubeopsskills/cloud-secret-resolvers/internal/pkg"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
 )
 
 type AwsProvider struct {
@@ -16,7 +18,7 @@ type AwsProvider struct {
 	SecretName    string
 }
 
-func (awsProvider AwsProvider) InitialCloudSession() pkg.CloudProvider {
+func (awsProvider AwsProvider) InitialCloudSession() provider.CloudProvider {
 	awsProvider.session = session.Must(session.NewSession())
 	awsProvider.secretManager = secretsmanager.New(
 		awsProvider.session,
@@ -26,14 +28,15 @@ func (awsProvider AwsProvider) InitialCloudSession() pkg.CloudProvider {
 	return awsProvider
 }
 
-func (awsProvider AwsProvider) RetrieveCredentials() map[string]string {
+func (awsProvider AwsProvider) RetrieveCredentials() (map[string]string, error) {
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(awsProvider.SecretName),
 	}
 
 	result, err := awsProvider.secretManager.GetSecretValue(input)
 	if err != nil {
-		panic(err.Error())
+		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
+		return nil, errors.New(errorMessage)
 	}
 
 	var secretString string
@@ -43,8 +46,9 @@ func (awsProvider AwsProvider) RetrieveCredentials() map[string]string {
 
 	var credentialData map[string]string
 	if err := json.Unmarshal([]byte(secretString), &credentialData); err != nil {
-		panic(err)
+		errorMessage := fmt.Sprintf("Could not unmarshal credentials json to object: %v", err)
+		return nil, errors.New(errorMessage)
 	}
 
-	return credentialData
+	return credentialData, nil
 }
