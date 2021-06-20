@@ -23,26 +23,8 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
   
   - Prerequisites:
     - Enabled the OIDC provider on your [EKS](https://aws.amazon.com/th/eks/) cluster (https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html)
-    - Your application Kubernetes pod has a service account with the following privilleges:
-        ```json
-        {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "secretsmanager:GetResourcePolicy",
-                        "secretsmanager:GetSecretValue",
-                        "secretsmanager:DescribeSecret",
-                        "secretsmanager:ListSecretVersionIds"
-                    ],
-                    "Resource": [
-                        "arn:aws:secretsmanager:[your region]:[your account ID]:secret:[your secret name]",
-                    ]
-                }
-            ]
-        }
-        ```
+    - Your application Kubernetes pod has a service account with the following privillege:
+       [policy.json](assets/policy.json)
   - Update your application entrypoint as follows:
     ```bash
     #!/bin/bash
