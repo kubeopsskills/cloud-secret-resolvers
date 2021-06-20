@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "KMSDecryption",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Encrypt", 
+                "kms:Decrypt", 
+                "kms:ReEncrypt*", 
+                "kms:GenerateDataKey*", 
+                "kms:CreateGrant", 
+                "kms:DescribeKey",
+                "kms:Describe*", 
+                "kms:Get*", 
+                "kms:List*", 
+                "kms:RevokeGrant"
+            ],
+            "Resource": [
+                "arn:aws:kms:<region>:<account-id>:key/<kms-key-id>"
+            ]
+        },
+        {
+            "Sid": "SecretManagerAccessing",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:UpdateSecret",
+                "secretsmanager:ListSecretVersionIds"
+            ],
+            "Resource": [
+                "arn:aws:secretsmanager:<region>:<account-id>:secret:<secret-id>"
+            ]
+        }
+    ]
+}
