@@ -26,7 +26,7 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 	cloudSession := cloudProvider.InitialCloudSession()
 	credentialData, err := cloudSession.RetrieveCredentials()
 	if err != nil {
-		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
+		errorMessage := fmt.Sprintf("%v", err)
 		return nil, errors.New(errorMessage)
 	}
 	re := regexp.MustCompile(`\W+`)
