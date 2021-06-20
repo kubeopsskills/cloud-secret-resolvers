@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/csr"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
@@ -22,7 +24,8 @@ func main() {
 		awsProvider := cloud.AwsProvider{Region: awsRegion, SecretName: awsSecretName}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
 		if err != nil {
-			log.Fatal("Failed as it could not sync any credentials from the cloud provider")
+			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
+			log.Fatal(errorMessage)
 		}
 		if *environmentVariableString == "" {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
