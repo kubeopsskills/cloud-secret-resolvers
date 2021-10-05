@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/csr"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/restapi"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 	log "github.com/sirupsen/logrus"
 )
@@ -31,8 +33,7 @@ func main() {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
 	case cloudType == "azure":
-		// TODO: Set default var value
-		azRegion := utils.GetEnv("AZ_REGION", "ap-southeast-1")
+		azRegion := utils.GetEnv("AZ_REGION", "southeastasia")
 		azSecretName := utils.GetEnv("AZ_SECRET_NAME", "")
 		if azSecretName == "" {
 			log.Fatal("No AZ_SECRET_NAME is defined.")
@@ -55,17 +56,22 @@ func main() {
 		}
 		azResource := utils.GetEnv("AZ_RESOURCE", "resource")
 
+		azureRestAPI := restapi.AzureRestAPI{
+			Client:       &http.Client{},
+			ClientId:     azClientId,
+			ClientSecret: azClientSecret,
+			Resource:     azResource,
+			TenantId:     azTenantId,
+		}
+
 		azureProvider := cloud.AzureProvider{
-			AceessTokenRequest: cloud.AzureAceessTokenRequest{
-				ClientId:     azClientId,
-				ClientSecret: azClientSecret,
-				Resource:     azResource,
-			},
 			Region:     azRegion,
 			SecretName: azSecretName,
-			TenantId:   azTenantId,
 			VaultURL:   azVaultURL,
+			API:        &azureRestAPI,
 		}
+
+		fmt.Printf("RSP: %s", azureProvider)
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
 		if err != nil {
 			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
