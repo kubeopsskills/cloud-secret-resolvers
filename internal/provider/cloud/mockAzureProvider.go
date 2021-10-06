@@ -13,6 +13,10 @@ type MockAzureProvider struct {
 	SecretName string
 }
 
+func (azProvider MockAzureProvider) GetName() string {
+	return "azure"
+}
+
 func (azProvider MockAzureProvider) InitialCloudSession() provider.CloudProvider {
 	return azProvider
 }

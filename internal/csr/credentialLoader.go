@@ -24,7 +24,27 @@ func LoadCredentialKeyFromEnvironment() map[string]string {
 
 func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credentialKey map[string]string) (*string, error) {
 	cloudSession := cloudProvider.InitialCloudSession()
-	credentialData, err := cloudSession.RetrieveCredentials()
+	var credentialData = make(map[string]string)
+
+	var err error
+	switch cloudProvider.GetName() {
+	case "aws":
+		credentialData, err = cloudSession.RetrieveCredentials()
+	case "azure":
+		var result map[string]string
+		for localKey := range credentialKey {
+			os.Setenv("AZ_SECRET_NAME", localKey)
+			result, err = cloudSession.RetrieveCredentials()
+			if err != nil {
+				errorMessage := fmt.Sprintf("%v", err)
+				return nil, errors.New(errorMessage)
+			}
+			if result[localKey] != "" {
+				credentialData[localKey] = result[localKey]
+			}
+		}
+	}
+
 	if err != nil {
 		errorMessage := fmt.Sprintf("%v", err)
 		return nil, errors.New(errorMessage)

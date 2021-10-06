@@ -34,10 +34,6 @@ func main() {
 		}
 	case cloudType == "azure":
 		azRegion := utils.GetEnv("AZ_REGION", "southeastasia")
-		azSecretName := utils.GetEnv("AZ_SECRET_NAME", "")
-		if azSecretName == "" {
-			log.Fatal("No AZ_SECRET_NAME is defined.")
-		}
 		azTenantId := utils.GetEnv("AZ_TENANT_ID", "")
 		if azTenantId == "" {
 			log.Fatal("No AZ_TENANT_ID is defined.")
@@ -65,10 +61,9 @@ func main() {
 		}
 
 		azureProvider := cloud.AzureProvider{
-			Region:     azRegion,
-			SecretName: azSecretName,
-			VaultURL:   azVaultURL,
-			API:        &azureRestAPI,
+			Region:   azRegion,
+			VaultURL: azVaultURL,
+			API:      &azureRestAPI,
 		}
 
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)

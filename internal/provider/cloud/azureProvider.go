@@ -6,16 +6,20 @@ import (
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/restapi"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 )
 
 type AzureProvider struct {
-	Region     string
-	SecretName string
-	VaultURL   string
+	Region   string
+	VaultURL string
 
 	API *restapi.AzureRestAPI
 
 	accessToken string
+}
+
+func (azProvider AzureProvider) GetName() string {
+	return "azure"
 }
 
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
@@ -28,10 +32,11 @@ func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
 }
 
 func (azProvider AzureProvider) RetrieveCredentials() (map[string]string, error) {
+	secretName := utils.GetEnv("AZ_SECRET_NAME", "")
 	result, err := azProvider.API.GetSecretValue(
 		azProvider.accessToken,
 		azProvider.VaultURL,
-		azProvider.SecretName,
+		secretName,
 	)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)

@@ -56,7 +56,7 @@ func TestAzureGetSecret(t *testing.T) {
 
 	mockResp := `{"value": "mock_secret_value"}`
 	responder := httpmock.NewBytesResponder(200, []byte(mockResp))
-	fakeUrl := fmt.Sprintf("%s//secrets/%s?api-version=7.2", "http://mock.vault.com", "mock_secret_name")
+	fakeUrl := fmt.Sprintf("%s/secrets/%s?api-version=7.2", "http://mock.vault.com", "mock_secret_name")
 	httpmock.RegisterResponder("GET", fakeUrl, responder)
 
 	result, err := api.GetSecretValue("token_mock", "http://mock.vault.com", "mock_secret_name")
