@@ -1,6 +1,10 @@
 package restapi
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
+)
 
 type MockAzureRestAPI struct {
 	IsGetAccessFail bool
@@ -24,8 +28,13 @@ func (api MockAzureRestAPI) GetSecretValue(accessToken string, vaultURL string, 
 		return credentialData, errorMsg
 	}
 
-	credentialData = map[string]string{
-		"db_name": "admin",
+	secretName = utils.GetEnv("AZ_SECRET_NAME", "")
+
+	switch secretName {
+	case "db_username":
+		credentialData["db_username"] = "admin"
+	case "db_password":
+		credentialData["db_password"] = "p@ssw0rd"
 	}
 
 	return credentialData, nil

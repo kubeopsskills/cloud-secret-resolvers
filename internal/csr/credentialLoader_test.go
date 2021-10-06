@@ -56,6 +56,8 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 	os.Setenv("db_username", "${db_username}")
+	os.Setenv("db_password", "${db_password}")
+
 	mockAPI := restapi.MockAzureRestAPI{
 		IsGetAccessFail: false,
 		IsGetSecretFail: false,
@@ -76,7 +78,9 @@ func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	os.Setenv("db_username", "${db_username}")
+	os.Setenv("dbUsername", "${dbUsername}")
+	os.Setenv("dbPassword", "${dbPassword}")
+
 	mockAPI := restapi.MockAzureRestAPI{
 		IsGetAccessFail: false,
 		IsGetSecretFail: true,
