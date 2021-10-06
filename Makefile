@@ -21,6 +21,9 @@ buildARM:
 
 build: buildWindows buildMacOS buildLinux buildARM
 
+run: 
+	go run cmd/csr/csr.go
+
 test:
 	go test -v ./...
 

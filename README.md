@@ -9,6 +9,7 @@ Cloud Secret Resolvers is a set of tools to help your applications (on Kubernete
   - [Installation](#installation)
   - [Using on Kubernetes](#using-on-kubernetes)
   - [How it works](#how-it-works)
+  - [Dev tools](#dev-tools)
 
 <!-- /TOC -->
 
@@ -84,3 +85,13 @@ The architecture looks like below.
 Internally, the `CSR` find local environment variables in the Kubernetes Pod Container which have Cloud Vault key placeholders for example: export db_username=${db_username}, then the `CSR` will extract db_username as a key and ${db_username} as a value. Finally, the `CSR` will use ${db_username} to match cloud vault key, retrieve cloud vault value, and map the value with db_username local environment.
 
 ![Diagram](https://github.com/kubeopsskills/cloud-secret-resolvers/blob/main/assets/diagram.png)
+
+## Dev tools
+
+> install make for using command with `brew install make`
+
+- `make run` for running app
+- `make test` for testing
+- `make test-coverage` for export test coverage
+- `make all` for building app for all OS
+- `make clean` for cleaning build app
