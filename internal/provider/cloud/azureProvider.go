@@ -19,17 +19,18 @@ type AzureProvider struct {
 }
 
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
-	token, err := azProvider.API.GetAccessToken()
+	result, err := azProvider.API.GetAccessToken()
 	if err != nil {
 		fmt.Printf("Could not retrieve access token: %v", err)
 	}
-	azProvider.accessToken = token
+	azProvider.accessToken = &result.Token
 	return azProvider
 }
 
 func (azProvider AzureProvider) RetrieveCredentials() (map[string]string, error) {
-	data, err := azProvider.API.GetSecretValue(
-		*azProvider.accessToken,
+	token := *azProvider.accessToken
+	result, err := azProvider.API.GetSecretValue(
+		token,
 		azProvider.VaultURL,
 		azProvider.SecretName,
 	)
@@ -37,5 +38,5 @@ func (azProvider AzureProvider) RetrieveCredentials() (map[string]string, error)
 		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
 		return nil, errors.New(errorMessage)
 	}
-	return data, nil
+	return result, nil
 }

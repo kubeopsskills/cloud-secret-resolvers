@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
+	resty "github.com/go-resty/resty/v2"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/csr"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/restapi"
@@ -57,7 +57,7 @@ func main() {
 		azResource := utils.GetEnv("AZ_RESOURCE", "resource")
 
 		azureRestAPI := restapi.AzureRestAPI{
-			Client:       &http.Client{},
+			Client:       resty.New(),
 			ClientId:     azClientId,
 			ClientSecret: azClientSecret,
 			Resource:     azResource,
@@ -71,7 +71,6 @@ func main() {
 			API:        &azureRestAPI,
 		}
 
-		fmt.Printf("RSP: %s", azureProvider)
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
 		if err != nil {
 			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
