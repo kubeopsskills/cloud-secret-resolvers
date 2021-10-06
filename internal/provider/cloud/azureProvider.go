@@ -15,7 +15,7 @@ type AzureProvider struct {
 
 	API *restapi.AzureRestAPI
 
-	accessToken *string
+	accessToken string
 }
 
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
@@ -23,14 +23,13 @@ func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
 	if err != nil {
 		fmt.Printf("Could not retrieve access token: %v", err)
 	}
-	azProvider.accessToken = &result.Token
+	azProvider.accessToken = result.Token
 	return azProvider
 }
 
 func (azProvider AzureProvider) RetrieveCredentials() (map[string]string, error) {
-	token := *azProvider.accessToken
 	result, err := azProvider.API.GetSecretValue(
-		token,
+		azProvider.accessToken,
 		azProvider.VaultURL,
 		azProvider.SecretName,
 	)

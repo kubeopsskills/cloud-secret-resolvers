@@ -53,13 +53,13 @@ func (api AzureRestAPI) GetAccessToken() (*AzureAccessToken, error) {
 }
 
 func (api AzureRestAPI) GetSecretValue(accessToken string, vaultURL string, secretName string) (map[string]string, error) {
-	reqURL := fmt.Sprintf("%s//secrets/%s?api-version=7.2", vaultURL, secretName)
-
+	reqURL := fmt.Sprintf("%s/secrets/%s?api-version=7.2", vaultURL, secretName)
 	resp, err := api.Client.R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Authorization", fmt.Sprintf("Bearer %s", accessToken)).
 		SetResult(AzureSecretValue{}).
 		Get(reqURL)
+
 	if err != nil {
 		errorMsg := fmt.Errorf("could not perfrom request: %v", err)
 		return nil, errorMsg

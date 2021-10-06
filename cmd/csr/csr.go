@@ -54,7 +54,7 @@ func main() {
 		if azVaultURL == "" {
 			log.Fatal("No AZ_CLIENT_SECRET is defined.")
 		}
-		azResource := utils.GetEnv("AZ_RESOURCE", "resource")
+		azResource := utils.GetEnv("AZ_RESOURCE", "https://vault.azure.net")
 
 		azureRestAPI := restapi.AzureRestAPI{
 			Client:       resty.New(),
