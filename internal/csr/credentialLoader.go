@@ -53,7 +53,7 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 	environmentVariableString := ""
 	for key, value := range credentialKey {
 		environmentVariableString = environmentVariableString + fmt.Sprintf("export %s=%s\n", key, credentialData[re.ReplaceAllString(value, "")])
-		fmt.Print(environmentVariableString)
 	}
+	fmt.Print(environmentVariableString)
 	return &environmentVariableString, nil
 }
