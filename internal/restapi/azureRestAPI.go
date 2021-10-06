@@ -7,6 +7,11 @@ import (
 	resty "github.com/go-resty/resty/v2"
 )
 
+type IAzureRestAPI interface {
+	GetAccessToken() (*AzureAccessToken, error)
+	GetSecretValue(accessToken string, vaultURL string, secretName string) (map[string]string, error)
+}
+
 type AzureRestAPI struct {
 	Client       *resty.Client
 	ClientId     string

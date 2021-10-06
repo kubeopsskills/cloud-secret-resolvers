@@ -13,7 +13,7 @@ type AzureProvider struct {
 	Region   string
 	VaultURL string
 
-	API *restapi.AzureRestAPI
+	API restapi.IAzureRestAPI
 
 	accessToken string
 }
