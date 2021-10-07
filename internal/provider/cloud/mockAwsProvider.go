@@ -48,6 +48,10 @@ func (mockSecretManagerClient *MockSecretManagerClient) GetSecretValue(input *se
 	}
 }
 
+func (awsProvider MockAwsProvider) GetName() string {
+	return "aws"
+}
+
 func (awsProvider MockAwsProvider) InitialCloudSession() provider.CloudProvider {
 	return awsProvider
 }

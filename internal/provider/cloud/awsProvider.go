@@ -18,6 +18,10 @@ type AwsProvider struct {
 	SecretName    string
 }
 
+func (awsProvider AwsProvider) GetName() string {
+	return "aws"
+}
+
 func (awsProvider AwsProvider) InitialCloudSession() provider.CloudProvider {
 	awsProvider.session = session.Must(session.NewSession())
 	awsProvider.secretManager = secretsmanager.New(
