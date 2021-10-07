@@ -49,7 +49,7 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
 - Azure
   - Prerequisites:
     1. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
-    2. Go access policy of azure vault and Add GET secret permissions for user
+    2. Go access policy of your azure key vault and Add GET secret permissions for user
     3. Login with `az login` with user from step B.
 
   - Update your application entrypoint as follows:
