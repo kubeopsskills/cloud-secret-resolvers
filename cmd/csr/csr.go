@@ -33,9 +33,9 @@ func main() {
 		}
 	case cloudType == "azure":
 		azRegion := utils.GetEnv("AZ_REGION", "southeastasia")
-		azSubscribeId := utils.GetEnv("AZ_SUBSCRIBE_ID", "")
+		azSubscribeId := utils.GetEnv("AZ_SUBSCRIPTION_ID", "")
 		if azSubscribeId == "" {
-			log.Fatal("No AZ_SUBSCRIBE_ID is defined.")
+			log.Fatal("No AZ_SUBSCRIPTION_ID is defined.")
 		}
 		azVaultName := utils.GetEnv("AZ_VAULT_NAME", "")
 		if azVaultName == "" {
