@@ -1,6 +1,6 @@
 [![codecov](https://codecov.io/gh/kubeopsskills/cloud-secret-resolvers/branch/main/graph/badge.svg?token=t65R7COoaz)](https://codecov.io/gh/kubeopsskills/cloud-secret-resolvers)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 # Cloud Secret Resolvers (CSR)
 
@@ -105,6 +105,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="https://naijab.com"><img src="https://avatars.githubusercontent.com/u/20009757?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nattapon Pondongnok</b></sub></a><br /><a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=naijab" title="Code">💻</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=naijab" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://kubeops.guru"><img src="https://avatars.githubusercontent.com/u/18477492?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Saritrat Jirakulphondchai</b></sub></a><br /><a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=Sikiryl" title="Code">💻</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=Sikiryl" title="Tests">⚠️</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/pulls?q=is%3Apr+reviewed-by%3ASikiryl" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://www.kubeops.guru"><img src="https://avatars.githubusercontent.com/u/4091492?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sirinat Paphatsirinatthi</b></sub></a><br /><a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=dmakeroam" title="Code">💻</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=dmakeroam" title="Tests">⚠️</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/pulls?q=is%3Apr+reviewed-by%3Admakeroam" title="Reviewed Pull Requests">👀</a></td>
   </tr>
