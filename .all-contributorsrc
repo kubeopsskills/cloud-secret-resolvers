@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "naijab",
+      "name": "Nattapon Pondongnok",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20009757?v=4",
+      "profile": "https://naijab.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "cloud-secret-resolvers",
+  "projectOwner": "kubeopsskills",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
