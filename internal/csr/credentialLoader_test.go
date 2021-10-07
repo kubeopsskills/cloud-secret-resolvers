@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
-	"github.com/kubeopsskills/cloud-secret-resolvers/internal/restapi"
 )
 
 func TestMain(t *testing.T) {
@@ -55,20 +54,13 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 }
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	os.Setenv("db_username", "${db_username}")
-	os.Setenv("db_password", "${db_password}")
-
-	mockAPI := restapi.MockAzureRestAPI{
-		IsGetAccessFail: false,
-		IsGetSecretFail: false,
-	}
-	azureProvider := cloud.AzureProvider{
-		Region:   "southeastasia",
-		VaultURL: "https://mock.vault.com",
-		API:      mockAPI,
+	mockAzureProvider := cloud.MockAzureProvider{
+		Region:    "southeastasia",
+		VaultName: "mock_vault",
+		IsFail:    false,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	environmentVariableString, err := SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
+	environmentVariableString, err := SyncCredentialKeyFromCloud(mockAzureProvider, keyValueEnvMap)
 	if err != nil {
 		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
 	}
@@ -78,20 +70,13 @@ func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	os.Setenv("dbUsername", "${dbUsername}")
-	os.Setenv("dbPassword", "${dbPassword}")
-
-	mockAPI := restapi.MockAzureRestAPI{
-		IsGetAccessFail: false,
-		IsGetSecretFail: true,
-	}
-	azureProvider := cloud.AzureProvider{
-		Region:   "southeastasia",
-		VaultURL: "https://mock.vault.com",
-		API:      mockAPI,
+	mockAzureProvider := cloud.MockAzureProvider{
+		Region:    "southeastasia",
+		VaultName: "mock_vault",
+		IsFail:    true,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	_, err := SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
+	_, err := SyncCredentialKeyFromCloud(mockAzureProvider, keyValueEnvMap)
 	if err == nil {
 		t.Fatal("Failed as it could not handle in case of the secret name is not available")
 	}
