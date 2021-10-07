@@ -72,8 +72,18 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
     AZ_REGION: "[your Azure region name]"
     AZ_VAULT_URL: "[your azure key vault url like: https://example.vault.azure.net]"
     AZ_CLIENT_ID: "[your service principle appId from step 3 prerequisites]"
-    AZ_CLIENT_SECRET: "[your service principle password from step 3 prerequisites]"
     AZ_TENANT_ID: "[your service principle tenant from step 3 prerequisites]"
+    ```
+  - Update your application Kubernetes secret as follows:
+    ```yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: secret-config
+    type: Opaque
+    data:
+      # AZ_CLIENT_SECRET is service principle password from step 3 prerequisites
+      AZ_CLIENT_SECRET: "< base64 encoded AZ_CLIENT_SECRET >"
     ```
   
 - Google Cloud
