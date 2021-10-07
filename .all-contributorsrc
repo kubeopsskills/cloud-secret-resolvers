@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "dmakeroam",
+      "name": "Sirinat Paphatsirinatthi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4091492?v=4",
+      "profile": "https://www.kubeops.guru",
+      "contributions": [
+        "code",
+        "test",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "cloud-secret-resolvers",
+  "projectOwner": "kubeopsskills",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
