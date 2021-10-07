@@ -6,6 +6,17 @@
   "commit": false,
   "contributors": [
     {
+      "login": "Sikiryl",
+      "name": "Saritrat Jirakulphondchai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18477492?v=4",
+      "profile": "https://kubeops.guru",
+      "contributions": [
+        "code",
+        "test",
+        "review"
+      ]
+     },
+     {
       "login": "dmakeroam",
       "name": "Sirinat Paphatsirinatthi",
       "avatar_url": "https://avatars.githubusercontent.com/u/4091492?v=4",
@@ -15,7 +26,7 @@
         "test",
         "review"
       ]
-    }
+     }
   ],
   "contributorsPerLine": 7,
   "projectName": "cloud-secret-resolvers",
