@@ -26,15 +26,12 @@ func (azProvider AzureProvider) GetName() string {
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
 	client := keyvault.New()
 	authorizer, err := auth.NewAuthorizerFromCLI()
-	authorizer.WithAuthorization()
-
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("azure cannot authentication: %v", err)
 	} else {
 		client.Authorizer = authorizer
 		azProvider.session = &client
 	}
-
 	return azProvider
 }
 
