@@ -48,11 +48,10 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
 
 - Azure
   - Prerequisites:
-
-    A. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
-    B. Login with `az login`
-    C. Create the service principal with `az ad sp create-for-rbac`
-    D. Add Access policies to azure vault secret with step B. service principal app with GET permissions for reading secrets
+    1. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
+    2. Login with `az login`
+    3. Create the service principal with `az ad sp create-for-rbac`
+    4. Add Access policies to azure vault secret with step B. service principal app with GET permissions for reading secrets
 
   - Update your application entrypoint as follows:
     ```bash
