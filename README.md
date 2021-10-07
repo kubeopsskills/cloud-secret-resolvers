@@ -52,9 +52,8 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
 - Azure
   - Prerequisites:
     1. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
-    2. Login with `az login`
-    3. Create the service principal with `az ad sp create-for-rbac`
-    4. Add Access policies to azure vault secret with step C. service principal app with GET permissions for reading secrets
+    2. Go to access policy of your azure key vault and add GET secret permissions for users
+    3. Login with `az login` with user from step B.
 
   - Update your application entrypoint as follows:
     ```bash
@@ -73,20 +72,8 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
     ...
     CLOUD_TYPE: "azure"
     AZ_REGION: "[your Azure region name]"
-    AZ_VAULT_URL: "[your azure key vault url like: https://example.vault.azure.net]"
-    AZ_CLIENT_ID: "[your service principle appId from step C. prerequisites]"
-    AZ_TENANT_ID: "[your service principle tenant from step C. prerequisites]"
-    ```
-  - Update your application Kubernetes secret as follows:
-    ```yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: secret-config
-    type: Opaque
-    data:
-      # AZ_CLIENT_SECRET is service principle password from step C. prerequisites
-      AZ_CLIENT_SECRET: "< base64 encoded AZ_CLIENT_SECRET >"
+    AZ_SUBSCRIPTION_ID: "[your Azure subscription id]"
+    AZ_VAULT_NAME: "[your Azure key vault name]"
     ```
   
 - Google Cloud
@@ -119,6 +106,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://kubeops.guru"><img src="https://avatars.githubusercontent.com/u/18477492?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Saritrat Jirakulphondchai</b></sub></a><br /><a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=Sikiryl" title="Code">💻</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=Sikiryl" title="Tests">⚠️</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/pulls?q=is%3Apr+reviewed-by%3ASikiryl" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://www.kubeops.guru"><img src="https://avatars.githubusercontent.com/u/4091492?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sirinat Paphatsirinatthi</b></sub></a><br /><a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=dmakeroam" title="Code">💻</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/commits?author=dmakeroam" title="Tests">⚠️</a> <a href="https://github.com/kubeopsskills/cloud-secret-resolvers/pulls?q=is%3Apr+reviewed-by%3Admakeroam" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
