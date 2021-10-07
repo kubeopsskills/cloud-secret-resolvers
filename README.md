@@ -48,10 +48,11 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
 
 - Azure
   - Prerequisites:
-    1. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
-    2. Login with `az login`
-    3. Create the service principal with `az ad sp create-for-rbac`
-    4. Add Access policies to azure vault secret with step 3. service principal app with GET permissions for reading secrets
+
+    A. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
+    B. Login with `az login`
+    C. Create the service principal with `az ad sp create-for-rbac`
+    D. Add Access policies to azure vault secret with step B. service principal app with GET permissions for reading secrets
 
   - Update your application entrypoint as follows:
     ```bash
@@ -71,8 +72,8 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
     CLOUD_TYPE: "azure"
     AZ_REGION: "[your Azure region name]"
     AZ_VAULT_URL: "[your azure key vault url like: https://example.vault.azure.net]"
-    AZ_CLIENT_ID: "[your service principle appId from step 3 prerequisites]"
-    AZ_TENANT_ID: "[your service principle tenant from step 3 prerequisites]"
+    AZ_CLIENT_ID: "[your service principle appId from step C. prerequisites]"
+    AZ_TENANT_ID: "[your service principle tenant from step C. prerequisites]"
     ```
   - Update your application Kubernetes secret as follows:
     ```yaml
@@ -82,7 +83,7 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
       name: secret-config
     type: Opaque
     data:
-      # AZ_CLIENT_SECRET is service principle password from step 3 prerequisites
+      # AZ_CLIENT_SECRET is service principle password from step C. prerequisites
       AZ_CLIENT_SECRET: "< base64 encoded AZ_CLIENT_SECRET >"
     ```
   
