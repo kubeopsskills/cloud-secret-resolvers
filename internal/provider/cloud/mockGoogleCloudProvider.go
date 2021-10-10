@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	gax "github.com/googleapis/gax-go/v2"
@@ -22,7 +21,7 @@ type MockGoogleCloudSession struct {
 	secretmanager.Client
 }
 
-func (session MockGoogleCloudSession) GetSecret(ctx context.Context, req *secretmanagerpb.GetSecretRequest, opts ...gax.CallOption) (*secretmanagerpb.Secret, error) {
+func (session MockGoogleCloudSession) AccessSecretVersion(ctx context.Context, req *secretmanagerpb.AccessSecretVersionRequest, opts ...gax.CallOption) (*secretmanagerpb.AccessSecretVersionResponse, error) {
 	if session.IsFail {
 		return nil, errors.New("the secret name is not available")
 	}
@@ -37,8 +36,11 @@ func (session MockGoogleCloudSession) GetSecret(ctx context.Context, req *secret
 		}
 	}
 
-	return &secretmanagerpb.Secret{
-		Name: val,
+	return &secretmanagerpb.AccessSecretVersionResponse{
+		Name: req.Name,
+		Payload: &secretmanagerpb.SecretPayload{
+			Data: []byte(val),
+		},
 	}, nil
 }
 
@@ -53,10 +55,10 @@ func (gcProvider MockGoogleCloudProvider) InitialCloudSession() provider.CloudPr
 func (gcProvider MockGoogleCloudProvider) RetrieveCredentials() (map[string]string, error) {
 	secretName := utils.GetEnv("GC_SECRET_NAME", "")
 
-	req := &secretmanagerpb.GetSecretRequest{
+	req := &secretmanagerpb.AccessSecretVersionRequest{
 		Name: secretName,
 	}
-	resp, err := gcProvider.Session.GetSecret(
+	resp, err := gcProvider.Session.AccessSecretVersion(
 		context.Background(),
 		req,
 	)
@@ -66,12 +68,8 @@ func (gcProvider MockGoogleCloudProvider) RetrieveCredentials() (map[string]stri
 		return nil, errors.New(errorMessage)
 	}
 
-	data := resp.String()
-	data = strings.Replace(data, "name:", "", -1)
-	data = strings.Replace(data, "\"", "", -1)
-
 	credentialData := make(map[string]string)
-	credentialData[secretName] = data
+	credentialData[secretName] = string(resp.Payload.Data)
 
 	return credentialData, nil
 }
