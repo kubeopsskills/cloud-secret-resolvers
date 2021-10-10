@@ -13,6 +13,7 @@ Cloud Secret Resolvers is a set of tools to help your applications (on Kubernete
   - [Using on Kubernetes](#using-on-kubernetes)
   - [How it works](#how-it-works)
   - [Dev tools](#dev-tools)
+  - [Contributors ✨](#contributors-)
 
 <!-- /TOC -->
 
@@ -77,7 +78,28 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
     ```
   
 - Google Cloud
-  - Coming Soon!
+  - Prerequisites:
+    - Add Secret Manager Secret Accessor permissions to your secret with "client_email" from Google cloud Credentials Json file
+  
+  - Update your application entrypoint as follows:
+    ```bash
+    #!/bin/bash
+    eval $(csr)
+    node ... # your application runtime command
+    ```
+  - Update your application Kubernetes config maps as follows:
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: [your config map name]
+      namespace: [your config map namespace name]
+    data:
+    ...
+    CLOUD_TYPE: "gcloud"
+    GOOGLE_PROJECT_ID: "[your Google cloud project Id]" 
+    GOOGLE_APPLICATION_CREDENTIALS: "[your Google cloud Credentials Json file path]"
+    ```
 
 ## How it works
 The architecture looks like below.
