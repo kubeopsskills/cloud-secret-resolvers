@@ -39,10 +39,10 @@ func (gcProvider GoogleCloudProvider) InitialCloudSession() provider.CloudProvid
 func (gcProvider GoogleCloudProvider) RetrieveCredentials() (map[string]string, error) {
 	secretName := utils.GetEnv("GC_SECRET_NAME", "")
 
-	req := &secretmanagerpb.GetSecretRequest{
-		Name: fmt.Sprintf("projects/%s/secrets/%s", gcProvider.ProjectId, secretName),
+	req := &secretmanagerpb.AccessSecretVersionRequest{
+		Name: fmt.Sprintf("projects/%s/secrets/%s/versions/latest", gcProvider.ProjectId, secretName),
 	}
-	resp, err := gcProvider.session.GetSecret(
+	resp, err := gcProvider.session.AccessSecretVersion(
 		gcProvider.context,
 		req,
 	)
@@ -52,12 +52,8 @@ func (gcProvider GoogleCloudProvider) RetrieveCredentials() (map[string]string, 
 		return nil, errors.New(errorMessage)
 	}
 
-	// FIXME: Cannot read secret vaule
-	// TODO: Convert string to map, But want see what is result
-	fmt.Printf("Result -> %v \n\n", resp)
-
 	credentialData := make(map[string]string)
-	credentialData[secretName] = resp.String()
+	credentialData[secretName] = string(resp.Payload.Data)
 
 	return credentialData, nil
 }
