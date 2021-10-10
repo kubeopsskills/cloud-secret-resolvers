@@ -28,7 +28,7 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 
 	var err error
 	switch cloudProvider.GetName() {
-	case "aws":
+	case "aws", "gcloud":
 		credentialData, err = cloudSession.RetrieveCredentials()
 	case "azure":
 		var result map[string]string
