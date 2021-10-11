@@ -13,10 +13,8 @@ import (
 )
 
 type AzureProvider struct {
-	SubscribeId string
-	Region      string
-	VaultName   string
-	session     *keyvault.BaseClient
+	VaultName string
+	session   *keyvault.BaseClient
 }
 
 func (azProvider AzureProvider) GetName() string {
@@ -25,9 +23,9 @@ func (azProvider AzureProvider) GetName() string {
 
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
 	client := keyvault.New()
-	authorizer, err := auth.NewAuthorizerFromCLI()
+	authorizer, err := auth.NewAuthorizerFromEnvironment()
 	if err != nil {
-		fmt.Printf("azure cannot authentication: %v", err)
+		fmt.Printf("cannot make an authentication to Azure: %v", err)
 	} else {
 		client.Authorizer = authorizer
 		azProvider.session = &client
