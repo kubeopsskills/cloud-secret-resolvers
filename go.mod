@@ -9,8 +9,6 @@ require (
 	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
 	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/aws/aws-sdk-go v1.37.1
-	github.com/go-resty/resty/v2 v2.6.0
-	github.com/jarcoal/httpmock v1.0.8
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0 // indirect
 	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
