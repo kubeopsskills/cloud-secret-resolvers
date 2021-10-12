@@ -34,9 +34,14 @@ func TestMain(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	mockAwsProvider := cloud.MockAwsProvider{Region: "ap-southeast-1", SecretName: "prod/profile"}
+	service := service.MockAwsCloudService{}
+	awsProvider := cloud.AwsProvider{
+		Service:    &service,
+		Region:     "ap-southeast-1",
+		SecretName: "prod/profile",
+	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	environmentVariableString, err := SyncCredentialKeyFromCloud(mockAwsProvider, keyValueEnvMap)
+	environmentVariableString, err := SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
 	if err != nil {
 		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
 	}
@@ -46,9 +51,14 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	mockAwsProvider := cloud.MockAwsProvider{Region: "ap-southeast-1", SecretName: "prod/customer"}
+	service := service.MockAwsCloudService{}
+	awsProvider := cloud.AwsProvider{
+		Service:    &service,
+		Region:     "ap-southeast-1",
+		SecretName: "prod/customer",
+	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	_, err := SyncCredentialKeyFromCloud(mockAwsProvider, keyValueEnvMap)
+	_, err := SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
 	if err == nil {
 		t.Fatal("Failed as it could not handle in case of the secret name is not available")
 	}

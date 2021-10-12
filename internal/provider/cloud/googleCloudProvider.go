@@ -36,12 +36,10 @@ func (gcProvider GoogleCloudProvider) RetrieveCredentials() (map[string]string, 
 	req := &secretmanagerpb.AccessSecretVersionRequest{
 		Name: fmt.Sprintf("projects/%s/secrets/%s/versions/latest", gcProvider.ProjectId, secretName),
 	}
-	// FIXME: Pointer invalid
 	resp, err := gcProvider.Service.AccessSecretVersion(
 		gcProvider.context,
 		req,
 	)
-
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
 		return nil, errors.New(errorMessage)

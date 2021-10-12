@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	log "github.com/sirupsen/logrus"
 
@@ -14,10 +13,6 @@ import (
 
 func main() {
 	// load environment configs
-	os.Setenv("CLOUD_TYPE", "gcloud")
-	os.Setenv("db_username", "${db_username}")
-	os.Setenv("db_password", "${db_password}")
-
 	keyValueEnvMap := csr.LoadCredentialKeyFromEnvironment()
 	cloudType := utils.GetEnv("CLOUD_TYPE", "aws")
 	log.Infof("Syncing credentials from %s ...", cloudType)
@@ -28,7 +23,12 @@ func main() {
 		if awsSecretName == "" {
 			log.Fatal("No AWS_SECRET_NAME is defined.")
 		}
-		awsProvider := cloud.AwsProvider{Region: awsRegion, SecretName: awsSecretName}
+		service := service.AWSCloudServiceImpl{}
+		awsProvider := cloud.AwsProvider{
+			Service:    &service,
+			Region:     awsRegion,
+			SecretName: awsSecretName,
+		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
 		if err != nil {
 			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
