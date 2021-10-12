@@ -56,15 +56,10 @@ func main() {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
 	case cloudType == "gcloud":
-		gcCreds := utils.GetEnv("GOOGLE_APPLICATION_CREDENTIALS", "")
-		if gcCreds == "" {
-			log.Fatal("No GOOGLE_APPLICATION_CREDENTIALS is defined.")
-		}
 		gcProjectId := utils.GetEnv("GOOGLE_PROJECT_ID", "")
 		if gcProjectId == "" {
 			log.Fatal("No GOOGLE_PROJECT_ID is defined.")
 		}
-
 		service := service.GoogleCloudServiceImpl{}
 		gcProvider := cloud.GoogleCloudProvider{
 			ProjectId: gcProjectId,
