@@ -2,16 +2,22 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/csr"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 )
 
 func main() {
 	// load environment configs
+	os.Setenv("CLOUD_TYPE", "gcloud")
+	os.Setenv("db_username", "${db_username}")
+	os.Setenv("db_password", "${db_password}")
+
 	keyValueEnvMap := csr.LoadCredentialKeyFromEnvironment()
 	cloudType := utils.GetEnv("CLOUD_TYPE", "aws")
 	log.Infof("Syncing credentials from %s ...", cloudType)
@@ -56,8 +62,11 @@ func main() {
 		if gcProjectId == "" {
 			log.Fatal("No GOOGLE_PROJECT_ID is defined.")
 		}
+
+		service := service.GoogleCloudServiceImpl{}
 		gcProvider := cloud.GoogleCloudProvider{
 			ProjectId: gcProjectId,
+			Service:   &service,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(gcProvider, keyValueEnvMap)
 		if err != nil {

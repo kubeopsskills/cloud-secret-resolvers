@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 )
 
 func TestMain(t *testing.T) {
@@ -83,13 +84,15 @@ func TestSyncAzureCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 }
 
 func TestSyncGoogleCloudCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	mockGCProvider := cloud.MockGoogleCloudProvider{
-		Session: cloud.MockGoogleCloudSession{
-			IsFail: false,
-		},
+	service := service.MockGoogleCloudService{
+		IsFail: false,
+	}
+	cloudProvider := cloud.GoogleCloudProvider{
+		ProjectId: "mock-id",
+		Service:   &service,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	environmentVariableString, err := SyncCredentialKeyFromCloud(mockGCProvider, keyValueEnvMap)
+	environmentVariableString, err := SyncCredentialKeyFromCloud(cloudProvider, keyValueEnvMap)
 	if err != nil {
 		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
 	}
@@ -99,13 +102,15 @@ func TestSyncGoogleCloudCredentialKeyFromCloud_SecretNameAvailable(t *testing.T)
 }
 
 func TestSyncGoogleCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	mockGCProvider := cloud.MockGoogleCloudProvider{
-		Session: cloud.MockGoogleCloudSession{
-			IsFail: true,
-		},
+	service := service.MockGoogleCloudService{
+		IsFail: true,
+	}
+	cloudProvider := cloud.GoogleCloudProvider{
+		ProjectId: "mock-id",
+		Service:   &service,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	_, err := SyncCredentialKeyFromCloud(mockGCProvider, keyValueEnvMap)
+	_, err := SyncCredentialKeyFromCloud(cloudProvider, keyValueEnvMap)
 	if err == nil {
 		t.Fatal("Failed as it could not handle in case of the secret name is not available")
 	}
