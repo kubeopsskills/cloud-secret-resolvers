@@ -31,19 +31,9 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 	case "aws":
 		credentialData, err = cloudSession.RetrieveCredentials()
 	case "azure":
-		var result map[string]string
-		for _, localValue := range credentialKey {
-			pureLocalValue := re.ReplaceAllString(localValue, "")
-			os.Setenv("AZ_SECRET_NAME", pureLocalValue)
-			result, err = cloudSession.RetrieveCredentials()
-			if err != nil {
-				errorMessage := fmt.Sprintf("%v", err)
-				return nil, errors.New(errorMessage)
-			}
-			if result[pureLocalValue] != "" {
-				credentialData[pureLocalValue] = result[pureLocalValue]
-			}
-		}
+		credentialData, err = getSecretWithLocalKey("AZ_SECRET_NAME", credentialKey, cloudSession)
+	case "gcloud":
+		credentialData, err = getSecretWithLocalKey("GC_SECRET_NAME", credentialKey, cloudSession)
 	}
 
 	if err != nil {
@@ -57,4 +47,31 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 	}
 	fmt.Print(environmentVariableString)
 	return &environmentVariableString, nil
+}
+
+func getSecretWithLocalKey(
+	secretKey string,
+	credentialKey map[string]string,
+	cloudSession provider.CloudProvider,
+) (map[string]string, error) {
+	var credentialData = make(map[string]string)
+	var result map[string]string
+	var err error
+
+	re := regexp.MustCompile(`\W+`)
+
+	for _, localValue := range credentialKey {
+		pureLocalValue := re.ReplaceAllString(localValue, "")
+
+		os.Setenv(secretKey, pureLocalValue)
+		result, err = cloudSession.RetrieveCredentials()
+		if err != nil {
+			errorMessage := fmt.Sprintf("%v", err)
+			return nil, errors.New(errorMessage)
+		}
+		if result[pureLocalValue] != "" {
+			credentialData[pureLocalValue] = result[pureLocalValue]
+		}
+	}
+	return credentialData, nil
 }

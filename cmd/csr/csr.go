@@ -47,6 +47,26 @@ func main() {
 		if *environmentVariableString == "" {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
+	case cloudType == "gcloud":
+		gcCreds := utils.GetEnv("GOOGLE_APPLICATION_CREDENTIALS", "")
+		if gcCreds == "" {
+			log.Fatal("No GOOGLE_APPLICATION_CREDENTIALS is defined.")
+		}
+		gcProjectId := utils.GetEnv("GOOGLE_PROJECT_ID", "")
+		if gcProjectId == "" {
+			log.Fatal("No GOOGLE_PROJECT_ID is defined.")
+		}
+		gcProvider := cloud.GoogleCloudProvider{
+			ProjectId: gcProjectId,
+		}
+		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(gcProvider, keyValueEnvMap)
+		if err != nil {
+			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
+			log.Fatal(errorMessage)
+		}
+		if *environmentVariableString == "" {
+			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
+		}
 	}
 	log.Info("Synced")
 
