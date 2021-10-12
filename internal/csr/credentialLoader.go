@@ -25,7 +25,7 @@ func LoadCredentialKeyFromEnvironment() map[string]string {
 func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credentialKey map[string]string) (*string, error) {
 	cloudSession := cloudProvider.InitialCloudSession()
 	var credentialData = make(map[string]string)
-
+	re := regexp.MustCompile(`\W+`)
 	var err error
 	switch cloudProvider.GetName() {
 	case "aws":
@@ -40,10 +40,10 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 		errorMessage := fmt.Sprintf("%v", err)
 		return nil, errors.New(errorMessage)
 	}
-	re := regexp.MustCompile(`\W+`)
 	environmentVariableString := ""
 	for key, value := range credentialKey {
-		environmentVariableString = environmentVariableString + fmt.Sprintf("export %s=%s\n", key, credentialData[re.ReplaceAllString(value, "")])
+		pureValue := re.ReplaceAllString(value, "")
+		environmentVariableString = environmentVariableString + fmt.Sprintf("export %s=%s\n", key, credentialData[pureValue])
 	}
 	fmt.Print(environmentVariableString)
 	return &environmentVariableString, nil

@@ -32,19 +32,12 @@ func main() {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
 	case cloudType == "azure":
-		azRegion := utils.GetEnv("AZ_REGION", "southeastasia")
-		azSubscribeId := utils.GetEnv("AZ_SUBSCRIPTION_ID", "")
-		if azSubscribeId == "" {
-			log.Fatal("No AZ_SUBSCRIPTION_ID is defined.")
-		}
 		azVaultName := utils.GetEnv("AZ_VAULT_NAME", "")
 		if azVaultName == "" {
 			log.Fatal("No AZ_VAULT_NAME is defined.")
 		}
 		azureProvider := cloud.AzureProvider{
-			SubscribeId: azSubscribeId,
-			Region:      azRegion,
-			VaultName:   azVaultName,
+			VaultName: azVaultName,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
 		if err != nil {

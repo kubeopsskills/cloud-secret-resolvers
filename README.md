@@ -52,9 +52,9 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
 
 - Azure
   - Prerequisites:
-    1. Install az cli with [link](https://docs.microsoft.com/cli/azure/install-azure-cli)
-    2. Go to access policy of your azure key vault and add GET secret permissions for users
-    3. Login with `az login` with user from step B.
+    1. Create a managed identity for your Azure Key Vault (https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview)
+    2. Grant "Key Vault Reader" and "Key Vault Secrets User" RBAC roles to the managed identity (https://docs.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-cli)
+    3. Create an Azure Identity and an Azure Identity Binding on your AKS cluster to map the managed identity to your pods on the cluster for providing access to the Azure Key Vault (https://azure.github.io/aad-pod-identity/docs/demo/standard_walkthrough/)
 
   - Update your application entrypoint as follows:
     ```bash
@@ -72,8 +72,6 @@ Cloud Secret Resolvers is available on Linux, ARM, macOS and Windows platforms.
     data:
     ...
     CLOUD_TYPE: "azure"
-    AZ_REGION: "[your Azure region name]"
-    AZ_SUBSCRIPTION_ID: "[your Azure subscription id]"
     AZ_VAULT_NAME: "[your Azure key vault name]"
     ```
   
