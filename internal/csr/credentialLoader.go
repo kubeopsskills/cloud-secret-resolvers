@@ -58,15 +58,19 @@ func getSecretWithLocalKey(
 	var result map[string]string
 	var err error
 
-	for localKey := range credentialKey {
-		os.Setenv(secretKey, localKey)
+	re := regexp.MustCompile(`\W+`)
+
+	for _, localValue := range credentialKey {
+		pureLocalValue := re.ReplaceAllString(localValue, "")
+
+		os.Setenv(secretKey, pureLocalValue)
 		result, err = cloudSession.RetrieveCredentials()
 		if err != nil {
 			errorMessage := fmt.Sprintf("%v", err)
 			return nil, errors.New(errorMessage)
 		}
-		if result[localKey] != "" {
-			credentialData[localKey] = result[localKey]
+		if result[pureLocalValue] != "" {
+			credentialData[pureLocalValue] = result[pureLocalValue]
 		}
 	}
 	return credentialData, nil

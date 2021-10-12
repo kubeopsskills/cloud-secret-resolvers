@@ -64,8 +64,7 @@ func main() {
 			log.Fatal("No GOOGLE_PROJECT_ID is defined.")
 		}
 		gcProvider := cloud.GoogleCloudProvider{
-			Credentials: gcCreds,
-			ProjectId:   gcProjectId,
+			ProjectId: gcProjectId,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(gcProvider, keyValueEnvMap)
 		if err != nil {
