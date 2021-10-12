@@ -25,7 +25,7 @@ func (gcProvider GoogleCloudProvider) InitialCloudSession() provider.CloudProvid
 	gcProvider.context = context.Background()
 	client, err := secretmanager.NewClient(gcProvider.context)
 	if err != nil {
-		fmt.Printf("Google Cloud cannot authentication: %v", err)
+		fmt.Printf("Cannot make an authentication to Google Cloud: %v", err)
 	}
 	gcProvider.session = client
 	return gcProvider
