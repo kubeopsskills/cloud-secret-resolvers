@@ -7,13 +7,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
 
-type MockAwsCloudService struct {
+type MockAwsService struct {
 }
 
-func (awsService *MockAwsCloudService) New() {
+func (awsService *MockAwsService) New() {
 }
 
-func (awsService *MockAwsCloudService) GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error) {
+func (awsService *MockAwsService) GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error) {
 	secretId := *input.SecretId
 	if secretId == "prod/profile" {
 		secretString := "{\"db_username\": \"admin\", \"db_password\": \"p@ssw0rd\"}"

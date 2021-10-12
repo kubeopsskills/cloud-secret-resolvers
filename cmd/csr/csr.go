@@ -23,7 +23,7 @@ func main() {
 		if awsSecretName == "" {
 			log.Fatal("No AWS_SECRET_NAME is defined.")
 		}
-		service := service.AWSCloudServiceImpl{}
+		service := service.AWSServiceImpl{}
 		awsProvider := cloud.AwsProvider{
 			Service:    &service,
 			Region:     awsRegion,
@@ -42,7 +42,9 @@ func main() {
 		if azVaultName == "" {
 			log.Fatal("No AZ_VAULT_NAME is defined.")
 		}
+		service := service.AzureServiceImpl{}
 		azureProvider := cloud.AzureProvider{
+			Service:   &service,
 			VaultName: azVaultName,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)

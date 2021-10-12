@@ -5,16 +5,14 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/profiles/latest/keyvault/keyvault"
-	"github.com/Azure/azure-sdk-for-go/services/keyvault/auth"
-
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 )
 
 type AzureProvider struct {
 	VaultName string
-	session   *keyvault.BaseClient
+	Service   service.AzureService
 }
 
 func (azProvider AzureProvider) GetName() string {
@@ -22,21 +20,14 @@ func (azProvider AzureProvider) GetName() string {
 }
 
 func (azProvider AzureProvider) InitialCloudSession() provider.CloudProvider {
-	client := keyvault.New()
-	authorizer, err := auth.NewAuthorizerFromEnvironment()
-	if err != nil {
-		fmt.Printf("cannot make an authentication to Azure: %v", err)
-	} else {
-		client.Authorizer = authorizer
-		azProvider.session = &client
-	}
+	azProvider.Service.New()
 	return azProvider
 }
 
 func (azProvider AzureProvider) RetrieveCredentials() (map[string]string, error) {
 	secretName := utils.GetEnv("AZ_SECRET_NAME", "")
 
-	result, err := azProvider.session.GetSecret(
+	result, err := azProvider.Service.GetSecret(
 		context.Background(),
 		fmt.Sprintf("https://%s.vault.azure.net", azProvider.VaultName),
 		secretName,

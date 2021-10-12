@@ -6,17 +6,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
 
-type AWSCloudService interface {
+type AWSService interface {
 	New()
 	GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error)
 }
 
-type AWSCloudServiceImpl struct {
+type AWSServiceImpl struct {
 	Region        string
 	secretManager *secretsmanager.SecretsManager
 }
 
-func (awsService *AWSCloudServiceImpl) New() {
+func (awsService *AWSServiceImpl) New() {
 	awsSession := session.Must(session.NewSession())
 	awsService.secretManager = secretsmanager.New(
 		awsSession,
@@ -24,6 +24,6 @@ func (awsService *AWSCloudServiceImpl) New() {
 	)
 }
 
-func (awsService *AWSCloudServiceImpl) GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error) {
+func (awsService *AWSServiceImpl) GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error) {
 	return awsService.secretManager.GetSecretValue(input)
 }

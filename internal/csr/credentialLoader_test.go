@@ -34,7 +34,7 @@ func TestMain(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	service := service.MockAwsCloudService{}
+	service := service.MockAwsService{}
 	awsProvider := cloud.AwsProvider{
 		Service:    &service,
 		Region:     "ap-southeast-1",
@@ -51,7 +51,7 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	service := service.MockAwsCloudService{}
+	service := service.MockAwsService{}
 	awsProvider := cloud.AwsProvider{
 		Service:    &service,
 		Region:     "ap-southeast-1",
@@ -65,13 +65,15 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 }
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	mockAzureProvider := cloud.MockAzureProvider{
-		Region:    "southeastasia",
+	service := service.MockAzureService{
+		IsFail: false,
+	}
+	azureProvider := cloud.AzureProvider{
+		Service:   &service,
 		VaultName: "mock_vault",
-		IsFail:    false,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	environmentVariableString, err := SyncCredentialKeyFromCloud(mockAzureProvider, keyValueEnvMap)
+	environmentVariableString, err := SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
 	if err != nil {
 		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
 	}
@@ -81,13 +83,15 @@ func TestSyncAzureCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAzureCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	mockAzureProvider := cloud.MockAzureProvider{
-		Region:    "southeastasia",
+	service := service.MockAzureService{
+		IsFail: true,
+	}
+	azureProvider := cloud.AzureProvider{
+		Service:   &service,
 		VaultName: "mock_vault",
-		IsFail:    true,
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
-	_, err := SyncCredentialKeyFromCloud(mockAzureProvider, keyValueEnvMap)
+	_, err := SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
 	if err == nil {
 		t.Fatal("Failed as it could not handle in case of the secret name is not available")
 	}
