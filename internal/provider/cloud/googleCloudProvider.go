@@ -8,15 +8,13 @@ import (
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
-	"google.golang.org/api/option"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 )
 
 type GoogleCloudProvider struct {
-	Credentials string
-	ProjectId   string
-	session     *secretmanager.Client
-	context     context.Context
+	ProjectId string
+	session   *secretmanager.Client
+	context   context.Context
 }
 
 func (gcProvider GoogleCloudProvider) GetName() string {
@@ -25,10 +23,7 @@ func (gcProvider GoogleCloudProvider) GetName() string {
 
 func (gcProvider GoogleCloudProvider) InitialCloudSession() provider.CloudProvider {
 	gcProvider.context = context.Background()
-	client, err := secretmanager.NewClient(
-		gcProvider.context,
-		option.WithCredentialsFile(gcProvider.Credentials),
-	)
+	client, err := secretmanager.NewClient(gcProvider.context)
 	if err != nil {
 		fmt.Printf("Google Cloud cannot authentication: %v", err)
 	}
