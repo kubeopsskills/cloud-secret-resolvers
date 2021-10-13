@@ -4,7 +4,7 @@ import (
 	"context"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
-	gax "github.com/googleapis/gax-go/v2"
+	"github.com/googleapis/gax-go/v2"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 )
 
