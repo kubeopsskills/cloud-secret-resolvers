@@ -30,6 +30,10 @@ test:
 test-coverage:
 	go test -v -coverpkg=./... -coverprofile=coverage.out ./... && go tool cover -func coverage.out
 
+html-coverage: 
+	go tool cover -html=coverage.out -o coverage.html
+	open coverage.html
+
 clean:
 	rm -rf bin
 

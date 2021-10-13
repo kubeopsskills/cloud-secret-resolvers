@@ -5,15 +5,15 @@ import (
 	"errors"
 	"fmt"
 
-	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 )
 
 type GoogleCloudProvider struct {
 	ProjectId string
-	session   *secretmanager.Client
+	Service   service.GoogleCloudService
 	context   context.Context
 }
 
@@ -23,11 +23,10 @@ func (gcProvider GoogleCloudProvider) GetName() string {
 
 func (gcProvider GoogleCloudProvider) InitialCloudSession() provider.CloudProvider {
 	gcProvider.context = context.Background()
-	client, err := secretmanager.NewClient(gcProvider.context)
+	err := gcProvider.Service.NewClient(gcProvider.context)
 	if err != nil {
 		fmt.Printf("Cannot make an authentication to Google Cloud: %v", err)
 	}
-	gcProvider.session = client
 	return gcProvider
 }
 
@@ -37,11 +36,10 @@ func (gcProvider GoogleCloudProvider) RetrieveCredentials() (map[string]string, 
 	req := &secretmanagerpb.AccessSecretVersionRequest{
 		Name: fmt.Sprintf("projects/%s/secrets/%s/versions/latest", gcProvider.ProjectId, secretName),
 	}
-	resp, err := gcProvider.session.AccessSecretVersion(
+	resp, err := gcProvider.Service.AccessSecretVersion(
 		gcProvider.context,
 		req,
 	)
-
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
 		return nil, errors.New(errorMessage)

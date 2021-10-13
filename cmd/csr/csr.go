@@ -7,6 +7,7 @@ import (
 
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/csr"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/utils"
 )
 
@@ -22,7 +23,12 @@ func main() {
 		if awsSecretName == "" {
 			log.Fatal("No AWS_SECRET_NAME is defined.")
 		}
-		awsProvider := cloud.AwsProvider{Region: awsRegion, SecretName: awsSecretName}
+		service := service.AWSServiceImpl{}
+		awsProvider := cloud.AwsProvider{
+			Service:    &service,
+			Region:     awsRegion,
+			SecretName: awsSecretName,
+		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
 		if err != nil {
 			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
@@ -36,7 +42,9 @@ func main() {
 		if azVaultName == "" {
 			log.Fatal("No AZ_VAULT_NAME is defined.")
 		}
+		service := service.AzureServiceImpl{}
 		azureProvider := cloud.AzureProvider{
+			Service:   &service,
 			VaultName: azVaultName,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(azureProvider, keyValueEnvMap)
@@ -48,16 +56,14 @@ func main() {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
 	case cloudType == "gcloud":
-		gcCreds := utils.GetEnv("GOOGLE_APPLICATION_CREDENTIALS", "")
-		if gcCreds == "" {
-			log.Fatal("No GOOGLE_APPLICATION_CREDENTIALS is defined.")
-		}
 		gcProjectId := utils.GetEnv("GOOGLE_PROJECT_ID", "")
 		if gcProjectId == "" {
 			log.Fatal("No GOOGLE_PROJECT_ID is defined.")
 		}
+		service := service.GoogleCloudServiceImpl{}
 		gcProvider := cloud.GoogleCloudProvider{
 			ProjectId: gcProjectId,
+			Service:   &service,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(gcProvider, keyValueEnvMap)
 		if err != nil {

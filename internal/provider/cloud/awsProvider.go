@@ -6,16 +6,15 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider"
+	"github.com/kubeopsskills/cloud-secret-resolvers/internal/provider/cloud/service"
 )
 
 type AwsProvider struct {
-	session       *session.Session
-	Region        string
-	secretManager *secretsmanager.SecretsManager
-	SecretName    string
+	Service    service.AWSService
+	Region     string
+	SecretName string
 }
 
 func (awsProvider AwsProvider) GetName() string {
@@ -23,12 +22,7 @@ func (awsProvider AwsProvider) GetName() string {
 }
 
 func (awsProvider AwsProvider) InitialCloudSession() provider.CloudProvider {
-	awsProvider.session = session.Must(session.NewSession())
-	awsProvider.secretManager = secretsmanager.New(
-		awsProvider.session,
-		aws.NewConfig().WithRegion(awsProvider.Region),
-	)
-
+	awsProvider.Service.New()
 	return awsProvider
 }
 
@@ -37,7 +31,7 @@ func (awsProvider AwsProvider) RetrieveCredentials() (map[string]string, error) 
 		SecretId: aws.String(awsProvider.SecretName),
 	}
 
-	result, err := awsProvider.secretManager.GetSecretValue(input)
+	result, err := awsProvider.Service.GetSecretValue(input)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not retrieve any credentials: %v", err)
 		return nil, errors.New(errorMessage)
