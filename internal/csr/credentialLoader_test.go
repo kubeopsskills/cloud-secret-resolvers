@@ -1,7 +1,6 @@
 package csr
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -140,7 +139,6 @@ func TestSyncVaultCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
 	environmentVariableString, err := SyncCredentialKeyFromCloud(vaultProvider, keyValueEnvMap)
-	fmt.Printf("test: %s", err)
 	if err != nil {
 		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
 	}
