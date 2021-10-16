@@ -27,12 +27,9 @@ func (service MockVaultService) Read(path string) (*api.Secret, error) {
 		LeaseDuration: 0,
 		Renewable:     false,
 		Data: map[string]interface{}{
-			"data": struct {
-				username string
-				password string
-			}{
-				"admin",
-				"password",
+			"data": map[string]interface{}{
+				"username": "username",
+				"password": "password",
 			},
 		},
 		Warnings: []string{},
