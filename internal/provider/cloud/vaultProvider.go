@@ -29,10 +29,15 @@ func (vaultProvider VaultProvider) RetrieveCredentials() (map[string]string, err
 		return nil, fmt.Errorf("unable to read secret: %w", err)
 	}
 
-	data, ok := secret.Data["data"].(map[string]string)
+	data, ok := secret.Data["data"].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("data type assertion failed: %T %#v", secret.Data["data"], secret.Data["data"])
 	}
+
+	finalData := make(map[string]string)
+	for key, value := range data {
+		finalData[key] = value.(string)
+	}
 	// data map can contain more than one key-value pair
-	return data, nil
+	return finalData, nil
 }
