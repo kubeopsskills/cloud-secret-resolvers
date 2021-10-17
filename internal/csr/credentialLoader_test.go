@@ -129,3 +129,34 @@ func TestSyncGoogleCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 		t.Fatal("Failed as it could not handle in case of the secret name is not available")
 	}
 }
+
+func TestSyncVaultCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
+	service := service.MockVaultService{}
+	vaultProvider := cloud.VaultProvider{
+		Service: &service,
+		Role:    "users-dev",
+		Path:    "kv/data/backend/dev/users",
+	}
+	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
+	environmentVariableString, err := SyncCredentialKeyFromCloud(vaultProvider, keyValueEnvMap)
+	if err != nil {
+		t.Fatal("Failed as it could not sync any credentials from the cloud provider")
+	}
+	if *environmentVariableString == "" {
+		t.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
+	}
+}
+
+func TestSyncVaultCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
+	service := service.MockVaultService{}
+	vaultProvider := cloud.VaultProvider{
+		Service: &service,
+		Role:    "users-dev",
+		Path:    "kv/data/backend/dev/app",
+	}
+	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
+	_, err := SyncCredentialKeyFromCloud(vaultProvider, keyValueEnvMap)
+	if err == nil {
+		t.Fatal("Failed as it could not handle in case of the secret name is not available")
+	}
+}

@@ -73,7 +73,33 @@ func main() {
 		if *environmentVariableString == "" {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
+	case cloudType == "vault":
+		vaultAddr := utils.GetEnv("VAULT_ADDR", "")
+		vaultRole := utils.GetEnv("VAULT_ROLE", "")
+		vaulePath := utils.GetEnv("VAULT_PATH", "")
+		if vaultAddr == "" {
+			log.Fatal("No VAULT_ADDR is defined.")
+		}
+		if vaultRole == "" {
+			log.Fatal("No VAULT_ROLE is defined.")
+		}
+		if vaulePath == "" {
+			log.Fatal("No VAULT_PATH is defined.")
+		}
+		service := service.VaultServiceImpl{}
+		vaultProvider := cloud.VaultProvider{
+			Service: &service,
+			Role:    vaultRole,
+			Path:    vaulePath,
+		}
+		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(vaultProvider, keyValueEnvMap)
+		if err != nil {
+			errorMessage := fmt.Sprintf("Failed as it could not sync any credentials from the cloud provider: %v\n", err)
+			log.Fatal(errorMessage)
+		}
+		if *environmentVariableString == "" {
+			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
+		}
+		log.Info("Synced")
 	}
-	log.Info("Synced")
-
 }

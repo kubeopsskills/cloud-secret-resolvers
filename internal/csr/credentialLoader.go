@@ -28,7 +28,7 @@ func SyncCredentialKeyFromCloud(cloudProvider provider.CloudProvider, credential
 	re := regexp.MustCompile(`\W+`)
 	var err error
 	switch cloudProvider.GetName() {
-	case "aws":
+	case "aws", "vault":
 		credentialData, err = cloudSession.RetrieveCredentials()
 	case "azure":
 		credentialData, err = getSecretWithLocalKey("AZ_SECRET_NAME", credentialKey, cloudSession)
