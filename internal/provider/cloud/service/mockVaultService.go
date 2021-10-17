@@ -7,13 +7,9 @@ import (
 )
 
 type MockVaultService struct {
-	IsFail bool
 }
 
 func (service MockVaultService) New() (*api.Client, error) {
-	if service.IsFail {
-		return nil, errors.New("cannot make an authentication to Hashicorp Vault")
-	}
 	return nil, nil
 }
 
