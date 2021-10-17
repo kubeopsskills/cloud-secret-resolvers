@@ -15,7 +15,9 @@ Cloud Secret Resolvers is a set of tools to help your applications (on Kubernete
   - [Installation](#installation)
   - [Using on Kubernetes](#using-on-kubernetes)
   - [How it works](#how-it-works)
-  - [Dev tools](#dev-tools)
+  - [Development](#development)
+  - [Contribution](#contributing)
+  - [Reporting issues and feedback](#reporting-issues-and-feedback)
   - [Contributors ✨](#contributors-)
 
 <!-- /TOC -->
