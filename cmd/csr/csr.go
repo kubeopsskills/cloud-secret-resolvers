@@ -74,8 +74,12 @@ func main() {
 			log.Fatal("Failed as it could not map local environment variables with the credentials from the cloud provider")
 		}
 	case cloudType == "vault":
+		vaultAddr := utils.GetEnv("VAULT_ADDR", "")
 		vaultRole := utils.GetEnv("VAULT_ROLE", "")
 		vaulePath := utils.GetEnv("VAULT_PATH", "")
+		if vaultAddr == "" {
+			log.Fatal("No VAULT_ADDR is defined.")
+		}
 		if vaultRole == "" {
 			log.Fatal("No VAULT_ROLE is defined.")
 		}
