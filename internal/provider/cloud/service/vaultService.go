@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"os"
 
-	vault "github.com/hashicorp/vault/api"
+	"github.com/hashicorp/vault/api"
 )
 
 type VaultService interface {
-	New() (*vault.Client, error)
-	Read(path string) (*vault.Secret, error)
+	New() (*api.Client, error)
+	Read(path string) (*api.Secret, error)
 }
 
 type VaultServiceImpl struct {
 	Role   string
-	Client *vault.Client
+	Client *api.Client
 }
 
-func (vaultService *VaultServiceImpl) New() (*vault.Client, error) {
-	vaultConfig := vault.DefaultConfig()
-	vaultClient, err := vault.NewClient(vaultConfig)
+func (vaultService *VaultServiceImpl) New() (*api.Client, error) {
+	vaultConfig := api.DefaultConfig()
+	vaultClient, err := api.NewClient(vaultConfig)
 	if err != nil {
 		return nil, fmt.Errorf("unable to initialize Vault client: %w", err)
 	}
@@ -47,7 +47,7 @@ func (vaultService *VaultServiceImpl) New() (*vault.Client, error) {
 	return vaultClient, nil
 }
 
-func (vaultService *VaultServiceImpl) Read(path string) (*vault.Secret, error) {
+func (vaultService *VaultServiceImpl) Read(path string) (*api.Secret, error) {
 	// get secret from Vault
 	return vaultService.Client.Logical().Read(path)
 }
