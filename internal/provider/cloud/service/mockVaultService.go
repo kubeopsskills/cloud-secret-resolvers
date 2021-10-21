@@ -7,6 +7,7 @@ import (
 )
 
 type MockVaultService struct {
+	Role string
 }
 
 func (service MockVaultService) New() (*api.Client, error) {

@@ -86,10 +86,9 @@ func main() {
 		if vaulePath == "" {
 			log.Fatal("No VAULT_PATH is defined.")
 		}
-		service := service.VaultServiceImpl{}
+		service := service.VaultServiceImpl{Role: vaultRole}
 		vaultProvider := cloud.VaultProvider{
 			Service: &service,
-			Role:    vaultRole,
 			Path:    vaulePath,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(vaultProvider, keyValueEnvMap)
