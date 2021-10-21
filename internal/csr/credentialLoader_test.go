@@ -131,10 +131,9 @@ func TestSyncGoogleCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
 }
 
 func TestSyncVaultCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	service := service.MockVaultService{}
+	service := service.MockVaultService{Role: "users-dev"}
 	vaultProvider := cloud.VaultProvider{
 		Service: &service,
-		Role:    "users-dev",
 		Path:    "kv/data/backend/dev/users",
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
@@ -148,10 +147,9 @@ func TestSyncVaultCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncVaultCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	service := service.MockVaultService{}
+	service := service.MockVaultService{Role: "users-dev"}
 	vaultProvider := cloud.VaultProvider{
 		Service: &service,
-		Role:    "users-dev",
 		Path:    "kv/data/backend/dev/app",
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()

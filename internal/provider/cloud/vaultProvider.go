@@ -9,7 +9,6 @@ import (
 
 type VaultProvider struct {
 	Service service.VaultService
-	Role    string
 	Path    string
 }
 
