@@ -21,7 +21,7 @@ buildLinux:
 buildARM:
 	env GOOS=linux GOARCH=arm64 go build -o ./$(TARGET_PATH)/csr $(GOMODULE)
 	cd $(TARGET_PATH) && tar -zcvf csr-Linux-arm64-$(VERSION).tar.gz ./csr
-	rm -rf ./csr
+	rm -rf ./$(TARGET_PATH)/csr
 
 build: buildWindows buildMacOS buildLinux buildARM
 
