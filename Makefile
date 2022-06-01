@@ -4,20 +4,24 @@ VERSION = 1.2.1
 GOMODULE = github.com/kubeopsskills/cloud-secret-resolvers/cmd/csr
 
 buildWindows:
-	env GOOS=windows $(GOARCH) go build -o ./$(TARGET_PATH)/windows/csr.exe $(GOMODULE)
-	cd $(TARGET_PATH) && zip csr-Windows-$(VERSION).zip ./windows/csr.exe
+	env GOOS=windows $(GOARCH) go build -o ./$(TARGET_PATH)/csr.exe $(GOMODULE)
+	cd $(TARGET_PATH) && zip csr-Windows-$(VERSION).zip ./csr.exe
+	rm -rf ./$(TARGET_PATH)/csr.exe
 
 buildMacOS:
-	env GOOS=darwin $(GOARCH) go build  -o ./$(TARGET_PATH)/macos/csr $(GOMODULE)
-	cd $(TARGET_PATH) && tar -zcvf csr-MacOS-$(VERSION).tar.gz ./macos/csr
+	env GOOS=darwin $(GOARCH) go build  -o ./$(TARGET_PATH)/csr $(GOMODULE)
+	cd $(TARGET_PATH) && tar -zcvf csr-MacOS-$(VERSION).tar.gz ./csr
+	rm -rf ./$(TARGET_PATH)/csr
 
 buildLinux:
-	env GOOS=linux $(GOARCH) go build -o ./$(TARGET_PATH)/linux/csr $(GOMODULE)
-	cd $(TARGET_PATH) && tar -zcvf csr-Linux-$(VERSION).tar.gz ./linux/csr
+	env GOOS=linux $(GOARCH) go build -o ./$(TARGET_PATH)/csr $(GOMODULE)
+	cd $(TARGET_PATH) && tar -zcvf csr-Linux-amd64-$(VERSION).tar.gz ./csr
+	rm -rf ./$(TARGET_PATH)/csr
 
 buildARM:
-	env GOOS=linux GOARCH=arm64 go build -o ./$(TARGET_PATH)/arm/csr $(GOMODULE)
-	cd $(TARGET_PATH) && tar -zcvf csr-ARM-$(VERSION).tar.gz ./arm/csr
+	env GOOS=linux GOARCH=arm64 go build -o ./$(TARGET_PATH)/csr $(GOMODULE)
+	cd $(TARGET_PATH) && tar -zcvf csr-Linux-arm64-$(VERSION).tar.gz ./csr
+	rm -rf ./$(TARGET_PATH)/csr
 
 build: buildWindows buildMacOS buildLinux buildARM
 
