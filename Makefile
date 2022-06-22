@@ -1,6 +1,6 @@
 TARGET_PATH = bin
 GOARCH = GOARCH=amd64
-VERSION = 1.2.1
+VERSION = 1.2.2
 GOMODULE = github.com/kubeopsskills/cloud-secret-resolvers/cmd/csr
 
 buildWindows:
