@@ -34,10 +34,9 @@ func TestMain(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
-	service := service.MockAwsService{}
+	service := service.MockAwsService{Region: "ap-southeast-1"}
 	awsProvider := cloud.AwsProvider{
 		Service:    &service,
-		Region:     "ap-southeast-1",
 		SecretName: "prod/profile",
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()
@@ -51,10 +50,9 @@ func TestSyncAWSCredentialKeyFromCloud_SecretNameAvailable(t *testing.T) {
 }
 
 func TestSyncAWSCredentialKeyFromCloud_SecretNameNotAvailable(t *testing.T) {
-	service := service.MockAwsService{}
+	service := service.MockAwsService{Region: "ap-southeast-1"}
 	awsProvider := cloud.AwsProvider{
 		Service:    &service,
-		Region:     "ap-southeast-1",
 		SecretName: "prod/customer",
 	}
 	keyValueEnvMap := LoadCredentialKeyFromEnvironment()

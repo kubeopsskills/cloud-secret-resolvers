@@ -23,10 +23,9 @@ func main() {
 		if awsSecretName == "" {
 			log.Fatal("No AWS_SECRET_NAME is defined.")
 		}
-		service := service.AWSServiceImpl{}
+		service := service.AWSServiceImpl{Region: awsRegion}
 		awsProvider := cloud.AwsProvider{
 			Service:    &service,
-			Region:     awsRegion,
 			SecretName: awsSecretName,
 		}
 		environmentVariableString, err := csr.SyncCredentialKeyFromCloud(awsProvider, keyValueEnvMap)
