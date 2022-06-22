@@ -13,7 +13,6 @@ import (
 
 type AwsProvider struct {
 	Service    service.AWSService
-	Region     string
 	SecretName string
 }
 

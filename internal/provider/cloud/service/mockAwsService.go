@@ -8,6 +8,7 @@ import (
 )
 
 type MockAwsService struct {
+	Region string
 }
 
 func (awsService *MockAwsService) New() {
